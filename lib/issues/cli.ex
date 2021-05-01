@@ -56,7 +56,7 @@ defmodule Issues.CLI do
     |> decode_response()
     |> sort_into_descending_order()
     |> last(count)
-    |> print_table_data(["number", "created_at", "title"])
+    |> print_table_data([:number, :created_at, :title])
   end
 
   def decode_response({:ok, body}), do: body

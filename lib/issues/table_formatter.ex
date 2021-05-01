@@ -5,11 +5,11 @@ defmodule Issues.TableFormatter do
       acc ++ ["#{col}": get_max_width(col, data)]
     end)
 
-    thead = print_headers(cws)
-    tbody = print_body(data, cws)
+   thead = print_headers(cws)
+   tbody = print_body(data, cws)
 
     lines = thead ++ tbody
-    Enum.join(lines, "\n")
+    IO.puts Enum.join(lines, "\n")
   end
 
   defp printable(str) when is_binary(str), do: str
@@ -17,7 +17,7 @@ defmodule Issues.TableFormatter do
 
   defp get_max_width(col, tabledata) do
     tabledata 
-         |> Enum.map(&(printable(&1[col]))) 
+         |> Enum.map(&(printable(&1[Atom.to_string(col)]))) 
          |> Enum.map(&(String.length/1))
          |> Enum.max
   end
@@ -34,9 +34,11 @@ defmodule Issues.TableFormatter do
 
   def print_body(data, cws) do
     data 
-      |> Enum.map(fn linedata -> 
-        linedata 
-          |> Enum.map(fn {col, value} -> String.pad_trailing(value, cws[col]) end) 
+    |> Enum.map(fn linedata ->
+        cws
+          |> Enum.map(fn {col, width} -> 
+            String.pad_trailing(printable(linedata[Atom.to_string(col)]), width) 
+            end) 
           |> Enum.join(" | ")
       end)
   end

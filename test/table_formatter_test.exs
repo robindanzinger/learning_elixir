@@ -20,7 +20,7 @@ defmodule TableFormatterTest do
   end
 
   test "print body" do 
-    data = [ [a: "r1", b: "r1"], [a: "r2", b: "r2xx"] ]
+    data = [ %{"a" => "r1", "b" => "r1"}, %{"a" => "r2", "b" => "r2xx"} ]
     cws = [a: 3, b: 5]
     body = TF.print_body(data, cws) 
     assert body == ["r1  | r1   ", "r2  | r2xx "]
@@ -31,8 +31,8 @@ defmodule TableFormatterTest do
   end
 
   defp fake_row_data(row, columns) do
-    Enum.reduce(0..columns, [], fn col, acc -> 
-      acc ++ ["c#{col}": "[row_#{row},col_#{col}]"]
+    Enum.reduce(0..columns, %{}, fn col, acc -> 
+      Map.merge(acc, %{"c#{col}" => "[row_#{row},col_#{col}]"})
     end )
   end
 end
