@@ -12,9 +12,12 @@ defmodule Issues.TableFormatter do
     Enum.join(lines, "\n")
   end
 
+  defp printable(str) when is_binary(str), do: str
+  defp printable(str), do: to_string(str)
+
   defp get_max_width(col, tabledata) do
     tabledata 
-         |> Enum.map(&(&1[col])) 
+         |> Enum.map(&(printable(&1[col]))) 
          |> Enum.map(&(String.length/1))
          |> Enum.max
   end

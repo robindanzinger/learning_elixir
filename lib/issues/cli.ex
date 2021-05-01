@@ -5,7 +5,9 @@ defmodule Issues.CLI do
   the various functions that end up generating a
   table of the last _n_ issues in a github project
   """
-  def run(argv) do
+
+  import Issues.TableFormatter, only: [ print_table_data: 2 ]
+  def main(argv) do
     argv
     |> parse_args
     |> process
@@ -54,6 +56,7 @@ defmodule Issues.CLI do
     |> decode_response()
     |> sort_into_descending_order()
     |> last(count)
+    |> print_table_data(["number", "created_at", "title"])
   end
 
   def decode_response({:ok, body}), do: body
